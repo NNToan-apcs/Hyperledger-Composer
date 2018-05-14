@@ -1,0 +1,27 @@
+/**
+ * Write your model definitions here
+ */
+
+namespace org.mobilenet
+
+asset Mobile identified by macAddress {
+  o String macAddress
+  o String name
+  o String description
+  --> User owner
+}
+
+participant User identified by userId {
+  o String userId
+  o String firstName
+  o String lastName
+}
+
+transaction Transfer {
+  --> Mobile mobile
+  --> User newOwner
+}
+
+event TransferNotification {
+    --> Mobile mobile
+}
