@@ -1,2 +1,9 @@
 node_modules/*
 package-lock.json
+dave.card
+jo.card
+alice@toan-network.card
+bob@toan-network.card
+alice/*
+bob/*
+dist/*

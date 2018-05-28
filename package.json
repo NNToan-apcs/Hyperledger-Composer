@@ -9,22 +9,23 @@
     "test": "nyc mocha -t 0 test/*.js && cucumber-js"
   },
   "author": "toan",
-  "email": "nntoan@apcs.vm",
+  "email": "nntoan@apcs.vn",
   "license": "Apache-2.0",
   "devDependencies": {
+    "chai": "latest",
+    "chai-as-promised": "latest",
     "composer-admin": "^0.19.0",
     "composer-cli": "^0.19.0",
     "composer-client": "^0.19.0",
     "composer-common": "^0.19.0",
     "composer-connector-embedded": "^0.19.0",
     "composer-cucumber-steps": "^0.19.0",
-    "chai": "latest",
-    "chai-as-promised": "latest",
     "cucumber": "^2.2.0",
     "eslint": "latest",
-    "nyc": "latest",
+    "ieee754": "^1.1.11",
     "mkdirp": "latest",
-    "mocha": "latest"
+    "mocha": "latest",
+    "nyc": "latest"
   },
   "dependencies": {
     "fabric-client": "^1.1.2"
