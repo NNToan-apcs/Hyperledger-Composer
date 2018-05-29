@@ -1,0 +1,10 @@
+cd $GOPATH/src/github.com/hyperledger/fabric-ca
+make docker
+
+
+cd docker/server
+#docker-compose up -d
+docker-compose -f docker-compose-org1.yml up -d
+docker-compose -f docker-compose-org2.yml up -d
+
+#fabric-ca-client getcacert -u http://127.0.0.1:7054

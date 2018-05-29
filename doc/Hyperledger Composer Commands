@@ -1,0 +1,223 @@
+---------HYPERLEDGER COMPOSER------------
+
+
+***************Start composer rest server ***************
+composer-rest-server -c admin@toan-network -n never -w true
+
+--> Pre-requisites:
+curl -O https://hyperledger.github.io/composer/latest/prereqs-ubuntu.sh
+
+chmod u+x prereqs-ubuntu.sh
+
+./prereqs-ubuntu.sh
+
+--> Development environment:
+
+-- CLI tools
+npm install -g composer-cli
+npm install -g composer-rest-server
+npm install -g generator-hyperledger-composer
+npm install -g yo
+npm install -g grpc
+
+-- IDE
+VScode : https://code.visualstudio.com/download
+Extension : Hyperledger Composer
+
+-- composer-playground
+npm install -g composer-playground
+
+-->Run : 
+composer-playground
+~> localhost:8080/login
+
+-- Install Hyperledger Fabric (default)
+
+mkdir ~/fabric-tools && cd ~/fabric-tools
+
+-->> Install step:
+curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/packages/fabric-dev-servers/fabric-dev-servers.tar.gz
+
+tar -xvf fabric-dev-servers.tar.gz
+
+-->download runtime:
+cd ~/fabric-tools
+./downloadFabric.sh
+
+-->Start runtime
+cd ~/fabric-tools
+./startFabric.sh
+./createPeerAdminCard.sh
+
+
+-----------Business Card------------------------------------
+
+yo hyperledger-composer:businessnetwork
+-->Change the content of files:
+	models/*.cto : Model file
+	lib/logic.js: Transaction logic
+	permissions.acl: Access control
+
+-->Generate a business network archive (1st time deploy)
+
+composer archive create -t dir -n .   ==> generate .bna file
+
+-->Deploying the business network
+   --> install business network
+composer network install --card PeerAdmin@hlfv1 --archiveFile toan-network@0.0.1.bna
+   --> start business network
+composer network start --networkName toan-network --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+   --> Import the network administrator identity
+composer card import --file networkadmin.card
+   --> Check deployed:
+composer network ping --card admin@toan-network
+
+
+---> Right here, Open your browser and connect to localhost:3000 => you should see the Composer Rest Server GUI
+
+--> new version 
+In the tutorial-network directory, open the package.json file.
+
+Update the version property from 0.0.1 to 0.0.2.
+
+
+composer archive create --sourceType dir --sourceName . -a toan-network@0.0.2.bna ==> ver 0.0.2
+
+composer network install --card PeerAdmin@hlfv1 --archiveFile toan-network@0.0.2.bna
+composer network upgrade -c PeerAdmin@hlfv1 -n toan-network -V 0.0.2
+composer network ping -c admin@toan-network | grep Business
+
+
+
+-->current problem : angular app:
+npm install -g grpc
+yo hyperledger-composer:angular
+
+
+
+
+**********Deploy to multi-orgs: https://hyperledger.github.io/composer/latest/tutorials/deploy-to-fabric-multi-org.html
+
+--> Clear previous network
+cd ~/fabric-tools
+./stopFabric.sh
+./teardownFabric.sh
+
+#composer card delete -c PeerAdmin@byfn-network-org1
+#composer card delete -c PeerAdmin@byfn-network-org2
+#composer card delete -c alice@toan-network
+#composer card delete -c bob@toan-network
+#composer card delete -c admin@toan-network
+#composer card delete -c PeerAdmin@fabric-network
+
+#Any other types of failure could indicate you have cards in the card store which are from an older version of Hyperledger Composer and you will then have to delete your file system card store in your HOME directory as follows: rm -fr $HOME/.composer
+
+#git clone -b issue-6978 https://github.com/sstone1/fabric-samples.git
+// fabric-samples folder
+cd fabric-samples
+
+#curl -sSL https://goo.gl/6wtTN5 | bash -s 1.1.0
+
+// first-network folder
+cd first-network
+
+#./byfn.sh -m generate
+
+--> Start fabric network
+./byfn.sh -m up -s couchdb -a
+
+--> tmp folder for setup connection
+mkdir -p /tmp/composer/org1
+
+mkdir -p /tmp/composer/org2
+
+--> Get CA certs for org1 org2 and orderer
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt > /tmp/composer/org1/ca-org1.txt
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt > /tmp/composer/org2/ca-org2.txt
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt > /tmp/composer/ca-orderer.txt
+
+---> Get pub/private key of org1
+export ORG1=crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+
+cp -p $ORG1/signcerts/A*.pem /tmp/composer/org1
+
+cp -p $ORG1/keystore/*_sk /tmp/composer/org1
+
+---> Get pub/private key of org2
+export ORG2=crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+
+cp -p $ORG2/signcerts/A*.pem /tmp/composer/org2
+
+cp -p $ORG2/keystore/*_sk /tmp/composer/org2
+
+--> Create org1 amd org2 admin card
+
+#composer card create -p /tmp/composer/org1/byfn-network-org1.json -u PeerAdmin -c /tmp/composer/org1/Admin@org1.example.com-cert.pem -k /tmp/composer/org1/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@byfn-network-org1.card
+#composer card create -p /tmp/composer/org2/byfn-network-org2.json -u PeerAdmin -c /tmp/composer/org2/Admin@org2.example.com-cert.pem -k /tmp/composer/org2/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@byfn-network-org2.card
+
+--> Import org1 and org2 admin card
+composer card delete -c PeerAdmin@byfn-network-org1
+composer card delete -c PeerAdmin@byfn-network-org2
+#composer card import -f PeerAdmin@byfn-network-org1.card --card PeerAdmin@byfn-network-org1
+#composer card import -f PeerAdmin@byfn-network-org2.card --card PeerAdmin@byfn-network-org2
+
+// toan-network folder
+cd toan-network
+--> Install business network onto Hyperledger Fabric peer nodes for org1 and org2:
+composer network install --card PeerAdmin@byfn-network-org1 --archiveFile toan-network@0.0.5.bna
+composer network install --card PeerAdmin@byfn-network-org2 --archiveFile toan-network@0.0.5.bna
+
+--> Get Alice cert from org1 admin
+composer identity request -c PeerAdmin@byfn-network-org1 -u admin -s adminpw -d alice
+--> Get Bob cert from org2 admin
+composer identity request -c PeerAdmin@byfn-network-org2 -u admin -s adminpw -d bob
+
+====> Start the business network
+composer network start -c PeerAdmin@byfn-network-org1 -n toan-network -V 0.0.5 -o endorsementPolicyFile=/tmp/composer/endorsement-policy.json -A alice -C alice/admin-pub.pem -A bob -C bob/admin-pub.pem
+composer network start -c PeerAdmin@byfn-network-org1 -n toan-network -V 0.0.5 -o endorsementPolicyFile=/tmp/composer/endorsement-policy.json -A alice -C alice/admin-pub.pem -A bob -C bob/admin-pub.pem
+--> Creating a business network card to access the business network as Org1 and Org2
+composer card create -p /tmp/composer/org1/byfn-network-org1.json -u alice -n toan-network -c alice/admin-pub.pem -k alice/admin-priv.pem
+composer card import -f alice@toan-network.card
+composer network ping -c alice@toan-network
+
+composer card create -p /tmp/composer/org2/byfn-network-org2.json -u bob -n toan-network -c bob/admin-pub.pem -k bob/admin-priv.pem
+composer card import -f bob@toan-network.card
+composer network ping -c bob@toan-network
+
+--> Start Rest Server
+composer-rest-server -c alice@toan-network -n never -w true
+
+
+
+----toan network----
+--> Get CA certs for org1 org2 and orderer
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' /home/toan/Hyperledger/toan-fabric-network/iot-network/crypto-config/peerOrganizations/org1.iot.net/peers/peer0.org1.iot.net/tls/ca.crt > ~/Hyperledger/connection/toan-network/org1/ca-peer0-org1.txt
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' /home/toan/Hyperledger/toan-fabric-network/iot-network/crypto-config/peerOrganizations/org1.iot.net/peers/peer1.org1.iot.net/tls/ca.crt > ~/Hyperledger/connection/toan-network/org1/ca-peer1-org1.txt
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' /home/toan/Hyperledger/toan-fabric-network/iot-network/crypto-config/peerOrganizations/org2.iot.net/peers/peer0.org2.iot.net/tls/ca.crt > ~/Hyperledger/connection/toan-network/org2/ca-peer0-org2.txt
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' /home/toan/Hyperledger/toan-fabric-network/iot-network/crypto-config/peerOrganizations/org2.iot.net/peers/peer1.org2.iot.net/tls/ca.crt > ~/Hyperledger/connection/toan-network/org2/ca-peer1-org2.txt
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' /home/toan/Hyperledger/toan-fabric-network/iot-network/crypto-config/ordererOrganizations/iot.net/orderers/orderer.iot.net/tls/ca.crt > ~/Hyperledger/connection/toan-network/ca-orderer.txt
+---> REMEMBER TO DELETE OLD CONTENT 1ST
+
+---> Get pub/private key of org1
+export ORG1=crypto-config/peerOrganizations/org1.iot.net/users/Admin@org1.iot.net/msp
+
+cp -p $ORG1/signcerts/A*.pem ~/Hyperledger/connection/toan-network/org1
+
+cp -p $ORG1/keystore/*_sk  ~/Hyperledger/connection/toan-network/org1
+
+---> Get pub/private key of org2
+export ORG2=crypto-config/peerOrganizations/org2.iot.net/users/Admin@org2.iot.net/msp
+
+cp -p $ORG2/signcerts/A*.pem  ~/Hyperledger/connection/toan-network/org2
+
+cp -p $ORG2/keystore/*_sk  ~/Hyperledger/connection/toan-network/org2
+
+--> Create org1 amd org2 admin card
+composer card create -p ~/Hyperledger/connection/toan-network/org1/toan-network-org1.json -u PeerAdmin -c ~/Hyperledger/connection/toan-network/org1/Admin@org1.iot.net-cert.pem -k ~/Hyperledger/connection/toan-network/org1/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@toan-network-org1.card
+composer card create -p ~/Hyperledger/connection/toan-network/org2/toan-network-org2.json -u PeerAdmin -c ~/Hyperledger/connection/toan-network/org2/Admin@org2.iot.net-cert.pem -k ~/Hyperledger/connection/toan-network/org2/*_sk -r PeerAdmin -r ChannelAdmin -f PeerAdmin@toan-network-org2.card
+
+--> Import org1 and org2 admin card
+composer card import -f PeerAdmin@toan-network-org1.card --card PeerAdmin@toan-network-org1
+composer card import -f PeerAdmin@toan-network-org2.card --card PeerAdmin@toan-network-org2
+
+
