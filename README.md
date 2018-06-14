@@ -21,7 +21,7 @@ npm install -g generator-hyperledger-composer
 npm install -g yo
 npm install -g grpc
 ```
-
+ 
 ### IDE
 VScode : https://code.visualstudio.com/download
 Extension : Hyperledger Composer
@@ -49,10 +49,12 @@ composer network start -c PeerAdmin@toan-network-org1 -n toan-network -V 0.0.5 -
 ## Creating a business network card to access the business network as Org1 and Org2
 ```
 composer card create -p ~/Hyperledger/toan-fabric-network/iot-network/connection/org1/toan-network-org1.json -u alice -n toan-network -c alice/admin-pub.pem -k alice/admin-priv.pem
+composer card delete -c alice@toan-network
 composer card import -f alice@toan-network.card
 composer network ping -c alice@toan-network
 
 composer card create -p ~/Hyperledger/toan-fabric-network/iot-network/connection/org2/toan-network-org2.json -u bob -n toan-network -c bob/admin-pub.pem -k bob/admin-priv.pem
+composer card delete -c bob@toan-network
 composer card import -f bob@toan-network.card
 composer network ping -c bob@toan-network
 ```
