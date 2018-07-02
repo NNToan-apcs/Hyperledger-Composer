@@ -20,8 +20,17 @@ npm install -g composer-rest-server
 npm install -g generator-hyperledger-composer
 npm install -g yo
 npm install -g grpc
+npm install -g composer-playground
 ```
- 
+Uninstall commands
+```
+npm uninstall -g composer-cli
+npm uninstall -g composer-rest-server
+npm uninstall -g generator-hyperledger-composer
+npm uninstall -g yo
+npm uninstall -g grpc
+npm uninstall -g composer-playground
+```
 ### IDE
 VScode : https://code.visualstudio.com/download
 Extension : Hyperledger Composer
@@ -44,17 +53,15 @@ composer identity request -c PeerAdmin@toan-network-org2 -u admin -s adminpw -d 
 ```
 ## Start the business network
 ```
-composer network start -c PeerAdmin@toan-network-org1 -n toan-network -V 0.0.5 -o endorsementPolicyFile=~/Hyperledger/toan-fabric-network/iot-network/connection/endorsement-policy.json -A alice -C alice/admin-pub.pem -A bob -C bob/admin-pub.pem
+composer network start -c PeerAdmin@toan-network-org1 -n toan-network -V 0.0.5 -o endorsementPolicyFile=../Hyperledger-Fabric/iot-network/connection/endorsement-policy.json -A alice -C alice/admin-pub.pem -A bob -C bob/admin-pub.pem
 ```
 ## Creating a business network card to access the business network as Org1 and Org2
 ```
-composer card create -p ~/Hyperledger/toan-fabric-network/iot-network/connection/org1/toan-network-org1.json -u alice -n toan-network -c alice/admin-pub.pem -k alice/admin-priv.pem
-composer card delete -c alice@toan-network
+composer card create -p ../Hyperledger-Fabric/iot-network/connection/org1/toan-network-org1.json -u alice -n toan-network -c alice/admin-pub.pem -k alice/admin-priv.pem
 composer card import -f alice@toan-network.card
 composer network ping -c alice@toan-network
 
-composer card create -p ~/Hyperledger/toan-fabric-network/iot-network/connection/org2/toan-network-org2.json -u bob -n toan-network -c bob/admin-pub.pem -k bob/admin-priv.pem
-composer card delete -c bob@toan-network
+composer card create -p ../Hyperledger-Fabric/iot-network/connection/org2/toan-network-org2.json -u bob -n toan-network -c bob/admin-pub.pem -k bob/admin-priv.pem
 composer card import -f bob@toan-network.card
 composer network ping -c bob@toan-network
 ```
@@ -62,4 +69,3 @@ composer network ping -c bob@toan-network
 ```
 composer-rest-server -c alice@toan-network -n never -w true
 ```
-
