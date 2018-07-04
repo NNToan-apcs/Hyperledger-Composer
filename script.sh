@@ -1,6 +1,7 @@
 #!/bin/bash
 VERSION=0.0.5
 NETWORK=toan-network
+CHANNEL_NAME=abc
 PEER_ADMIN_1=PeerAdmin@$NETWORK-org1
 PEER_ADMIN_2=PeerAdmin@$NETWORK-org2
 USER_1=alice
@@ -9,7 +10,7 @@ CONNECTION_1=../Hyperledger-Fabric/iot-network/connection/org1/toan-network-org1
 CONNECTION_2=../Hyperledger-Fabric/iot-network/connection/org2/toan-network-org2.json
 EPF=../Hyperledger-Fabric/iot-network/connection/endorsement-policy.json
 DELAY=60 #sleep 1 min
-TIMEOUT=600 # 10 min timeout
+TIMEOUT=6000 # 100 min timeout
 composer network install --card $PEER_ADMIN_1 --archiveFile $NETWORK@$VERSION.bna
 composer network install --card $PEER_ADMIN_2 --archiveFile $NETWORK@$VERSION.bna
 
@@ -25,7 +26,7 @@ starttime=$(date +%s)
 
 # continue to poll
 # we either get a successful response, or reach TIMEOUT
-while test "$(($(date +%s)-starttime))" -lt "$TIMEOUT" -a $rc -ne 0
+while test "$(($(date +%s)-starttime))" -lt "$TIMEOUT" -a $rc -ne 0 || $rc -ne 2 
 do
     sleep $DELAY
     echo "Attempting to Start network '$NETWORK' ...$(($(date +%s)-starttime)) secs"
@@ -34,15 +35,25 @@ do
     res=$?
     set +x
     test $res -eq 0 && VALUE=$(cat log.txt | awk '/The connection to the network was successfully tested/ {print $NF}')
+    echo $res
+    echo $VALUE
     test "$VALUE" = "$EXPECTED_RESULT" && let rc=0
+    test $res -eq 1 && VALUE=$(cat log.txt | awk '/status: 500, message: chaincode exists/ {print $NF}')
+    echo $res
+    echo $VALUE
+    test "$VALUE" = "$EXPECTED_RESULT)" && let rc=2
 done
 echo
 cat log.txt
 if test $rc -eq 0 ; then
-    echo "===================== Starting network '$NETWORK' on channel '$CHANNEL_NAME' is successful ===================== "
+    echo "===================== Starting network '$NETWORK' on channel '$CHANNEL_NAME' is successful ===================== "    
+fi
+
+if test $rc -eq 2 ; then     
+    echo "===================== Starting network '$NETWORK' on channel '$CHANNEL_NAME' is started ===================== "    
 else
     echo "!!!!!!!!!!!!!!! Starting network '$NETWORK' on channel '$CHANNEL_NAME' is FAIL !!!!!!!!!!!!!!!!"
-    echo
+    echo "!!!!!!!!!!!!!!! Possible reasons: network is starting !!!!!!!!!!!!!!!!!!!!"
     exit 1
 fi
 

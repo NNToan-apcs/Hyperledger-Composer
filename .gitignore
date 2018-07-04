@@ -6,5 +6,6 @@ alice@toan-network.card
 bob@toan-network.card
 alice/*
 bob/*
+angular-app/*
 dist/*
 log.txt
