@@ -58,10 +58,12 @@ composer network start -c PeerAdmin@toan-network-org1 -n toan-network -V 0.0.5 -
 ## Creating a business network card to access the business network as Org1 and Org2
 ```
 composer card create -p ../Hyperledger-Fabric/iot-network/connection/org1/toan-network-org1.json -u alice -n toan-network -c alice/admin-pub.pem -k alice/admin-priv.pem
+composer card delete -c alice@toan-network
 composer card import -f alice@toan-network.card
 composer network ping -c alice@toan-network
 
 composer card create -p ../Hyperledger-Fabric/iot-network/connection/org2/toan-network-org2.json -u bob -n toan-network -c bob/admin-pub.pem -k bob/admin-priv.pem
+composer card delete -c bob@toan-network
 composer card import -f bob@toan-network.card
 composer network ping -c bob@toan-network
 ```
@@ -69,3 +71,11 @@ composer network ping -c bob@toan-network
 ```
 composer-rest-server -c alice@toan-network -n never -w true
 ```
+
+composer archive create --sourceType dir --sourceName . -a toan-network@0.0.9.bna
+
+composer network install --card PeerAdmin@toan-network-org1 --archiveFile toan-network@0.0.9.bna
+composer network install --card PeerAdmin@toan-network-org2 --archiveFile toan-network@0.0.9.bna
+composer network upgrade -c PeerAdmin@toan-network-org1 PeerAd\
+min@toan-network-org2 -n toan-network -V 0.0.9
+composer network ping -c alice@toan-network | grep Business

@@ -4,24 +4,60 @@
 
 namespace org.mobilenet
 
-asset Mobile identified by macAddress {
-  o String macAddress
+// asset Mobile identified by macAddress {
+//   o String macAddress
+//   o String name
+//   o String description
+//   --> User owner
+// }
+
+// participant User identified by userId {
+//   o String userId
+//   o String firstName
+//   o String lastName
+// }
+
+// transaction Transfer {
+//   --> Mobile mobile
+//   --> User newOwner
+// }
+
+// event TransferNotification {
+//     --> Mobile mobile
+// }
+
+
+asset Course identified by courseID {
+  o String courseID
   o String name
   o String description
-  --> User owner
+  --> Lecturer owner
+  --> Student[] learners
 }
 
-participant User identified by userId {
-  o String userId
+participant Lecturer identified by lecturerID {
+  o String lecturerID
   o String firstName
   o String lastName
 }
 
-transaction Transfer {
-  --> Mobile mobile
-  --> User newOwner
+participant Student identified by studentID {
+  o String studentID
+  o String firstName
+  o String lastName
 }
 
-event TransferNotification {
-    --> Mobile mobile
+transaction AddStudentToCourse {
+  --> Course course
+  --> Student student
+}
+
+event AddStudentToCourseSuccessNotification {
+  --> Course course
+  --> Student student
+}
+
+event AddStudentToCourseFailNotification {
+  --> Course course
+  --> Student student
 }

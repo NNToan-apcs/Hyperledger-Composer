@@ -1,0 +1,218 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>toan-network</title>
+
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/x-icon" href="/api-doc/composer/unstable/favicon.ico">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+    <link href="./assets/css/normalize.css" rel="stylesheet">
+    <link href="./assets/css/new-style.min.css" rel="stylesheet">
+    <link href="./assets/css/grid-layout.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
+
+</head>
+
+
+<body class="">
+
+    <div class="SiteWrapper">
+        <div class="content">
+            <article class="docs-container">
+
+                 <div class="page-sidebar-grid" id="off-canvas">
+                
+                    <div class="docs-pagenav-grid">
+                        <!-- Navigation -->
+                        <nav class="navbar-docs" role="navigation">
+                            <div class="search-form">
+                            <img width="200px" src=""></img>
+                            </div>
+
+                            <!-- Brand and toggle get grouped for better mobile display -->
+                            <a class="navbar-brand" href="./index.html">
+                                <b>toan-network</b>@</a>0.0.9
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <div class="top-nav-docs">
+                                    <a href="./index.html">Summary</a>
+                                    <a href="./assets.html">Assets</a>
+                                    <a href="./transactions.html">Transactions</a>
+                                    <a href="./participants.html">Participants</a>          
+                                    <a href="./events.html">Events</a>                          
+                                    <a href="./enums.html">Enums</a>  
+                    <a href="./queries.html">Queries</a>            
+                       <a href="./acls.html">ACLs</a>                  
+                                </div>
+                            </div>
+                        </nav>
+                          
+                           
+                            <div class="docs-current-page-grid">
+                                <p>ACLs</p>
+                            </div>
+                            
+                    </div>
+                    
+                  <nav class="context-nav">
+                    <ul>
+                       
+                        
+                             <li><p><a href="#systemacl"><b>SystemACL</b></a></p></li>  
+                        
+                             <li><p><a href="#admin-canhavefullaccess"><b>Admin_CanHaveFullAccess</b></a></p></li>  
+                        
+                             <li><p><a href="#r1a-studentseeupdatethemselvesonly"><b>R1a_StudentSeeUpdateThemselvesOnly</b></a></p></li>  
+                        
+                             <li><p><a href="#r1a-lecturerseeupdatethemselvesonly"><b>R1a_LecturerSeeUpdateThemselvesOnly</b></a></p></li>  
+                        
+                             <li><p><a href="#r1b-lecturerseetheircourse"><b>R1b_LecturerSeeTheirCourse</b></a></p></li>  
+                        
+                             <li><p><a href="#r1b-studentseetheircourse"><b>R1b_StudentSeeTheirCourse</b></a></p></li>  
+                        
+                             <li><p><a href="#r2-enableaddstudenttocoursetxn"><b>R2_EnableAddStudentToCourseTxn</b></a></p></li>  
+                        
+                             <li><p><a href="#r3-lecturersseeownhistoryonly"><b>R3_LecturersSeeOwnHistoryOnly</b></a></p></li>  
+                        
+                    
+
+                    </ul>
+
+                    </nav>
+  
+                </div>
+
+
+
+                <div class="page-content-grid">
+                    <section class="content-chunk" id="readme">
+                    <h1 id="access-control-rules">Access Control Rules</h1>
+<h3 id="systemacl">SystemACL</h3>
+<p>System ACL to permit all access</p>
+<ul>
+<li><em>Action</em> : ALLOW</li>
+<li><em>Noun</em> : org.hyperledger.composer.system.**</li>
+<li><em>Participant</em> : none</li>
+<li><em>Predicate</em> : <code>true</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>none</strong> and I am accessing the resource <strong>org.hyperledger.composer.system.</strong>**
+then my action will be  <strong>ALLOW</strong>ed</p>
+</blockquote>
+<h3 id="admin-canhavefullaccess">Admin_CanHaveFullAccess</h3>
+<p>Allow all participants access to all resources</p>
+<ul>
+<li><em>Action</em> : ALLOW</li>
+<li><em>Noun</em> : org.mobilenet.*</li>
+<li><em>Participant</em> : org.hyperledger.composer.system.NetworkAdmin</li>
+<li><em>Predicate</em> : <code>true</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>org.hyperledger.composer.system.NetworkAdmin</strong> and I am accessing the resource <strong>org.mobilenet.</strong>*
+then my action will be  <strong>ALLOW</strong>ed</p>
+</blockquote>
+<h3 id="r1a-studentseeupdatethemselvesonly">R1a_StudentSeeUpdateThemselvesOnly</h3>
+<p>Student can see and update their own record only</p>
+<ul>
+<li><em>Action</em> : ALLOW</li>
+<li><em>Noun</em> : org.mobilenet.Student</li>
+<li><em>Participant</em> : org.mobilenet.Student:t</li>
+<li><em>Predicate</em> : <code>v.getIdentifier() == t.getIdentifier()</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>org.mobilenet.Student:t</strong> and I am accessing the resource <strong>org.mobilenet.Student</strong>  and <strong>v.getIdentifier() == t.getIdentifier()</strong> is true
+then my action will be  <strong>ALLOW</strong>ed</p>
+</blockquote>
+<h3 id="r1a-lecturerseeupdatethemselvesonly">R1a_LecturerSeeUpdateThemselvesOnly</h3>
+<p>Lecturer can see and update their own record only</p>
+<ul>
+<li><em>Action</em> : ALLOW</li>
+<li><em>Noun</em> : org.mobilenet.Lecturer</li>
+<li><em>Participant</em> : org.mobilenet.Lecturer:t</li>
+<li><em>Predicate</em> : <code>v.getIdentifier() == t.getIdentifier()</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>org.mobilenet.Lecturer:t</strong> and I am accessing the resource <strong>org.mobilenet.Lecturer</strong>  and <strong>v.getIdentifier() == t.getIdentifier()</strong> is true
+then my action will be  <strong>ALLOW</strong>ed</p>
+</blockquote>
+<h3 id="r1b-lecturerseetheircourse">R1b_LecturerSeeTheirCourse</h3>
+<p>Lecturer can see/work with their own Course</p>
+<ul>
+<li><em>Action</em> : ALLOW</li>
+<li><em>Noun</em> : org.mobilenet.Course</li>
+<li><em>Participant</em> : org.mobilenet.Lecturer:t</li>
+<li><em>Predicate</em> : <code>c.owner.getIdentifier() == t.getIdentifier()</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>org.mobilenet.Lecturer:t</strong> and I am accessing the resource <strong>org.mobilenet.Course</strong>  and <strong>c.owner.getIdentifier() == t.getIdentifier()</strong> is true
+then my action will be  <strong>ALLOW</strong>ed</p>
+</blockquote>
+<h3 id="r1b-studentseetheircourse">R1b_StudentSeeTheirCourse</h3>
+<p>Student can see with their own Course</p>
+<ul>
+<li><em>Action</em> : ALLOW</li>
+<li><em>Noun</em> : org.mobilenet.Course</li>
+<li><em>Participant</em> : org.mobilenet.Student:t</li>
+<li><em>Predicate</em> : <code>c.owner.getIdentifier() == t.getIdentifier()</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>org.mobilenet.Student:t</strong> and I am accessing the resource <strong>org.mobilenet.Course</strong>  and <strong>c.owner.getIdentifier() == t.getIdentifier()</strong> is true
+then my action will be  <strong>ALLOW</strong>ed</p>
+</blockquote>
+<h3 id="r2-enableaddstudenttocoursetxn">R2_EnableAddStudentToCourseTxn</h3>
+<p>Enable Lecturers to submit AddStudentToCourse transactions</p>
+<ul>
+<li><em>Action</em> : ALLOW</li>
+<li><em>Noun</em> : org.mobilenet.AddStudentToCourse</li>
+<li><em>Participant</em> : org.mobilenet.Lecturer</li>
+<li><em>Predicate</em> : <code>true</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>org.mobilenet.Lecturer</strong> and I am accessing the resource <strong>org.mobilenet.AddStudentToCourse</strong>
+then my action will be  <strong>ALLOW</strong>ed</p>
+</blockquote>
+<h3 id="r3-lecturersseeownhistoryonly">R3_LecturersSeeOwnHistoryOnly</h3>
+<p>Lecturers should be able to see the history of their own transactions only</p>
+<ul>
+<li><em>Action</em> : DENY</li>
+<li><em>Noun</em> : org.hyperledger.composer.system.HistorianRecord</li>
+<li><em>Participant</em> : org.mobilenet.Lecturer:t</li>
+<li><em>Predicate</em> : <code>v.participantInvoking.getIdentifier() != t.getIdentifier()</code></li>
+</ul>
+<blockquote>
+<p>If I am a <strong>org.mobilenet.Lecturer:t</strong> and I am accessing the resource <strong>org.hyperledger.composer.system.HistorianRecord</strong>  and <strong>v.participantInvoking.getIdentifier() != t.getIdentifier()</strong> is true
+then my action will be  <strong>DENY</strong>ed</p>
+</blockquote>
+ 
+                    </section>
+                </div>
+                <!-- Otherwise, have the main content fill all 12 columns... -->
+
+                <div class="PageNavigation">
+
+
+                </div>
+            </article>
+        </div>
+
+
+
+
+
+    </div>
+    <script src="./assets/js/nav.js"></script>
+</body>
+
+</html>
+
+
+
+
+

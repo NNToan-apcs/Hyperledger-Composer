@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=0.0.5
+VERSION=0.0.9
 NETWORK=toan-network
 CHANNEL_NAME=abc
 PEER_ADMIN_1=PeerAdmin@$NETWORK-org1
@@ -9,7 +9,7 @@ USER_2=bob
 CONNECTION_1=../Hyperledger-Fabric/iot-network/connection/org1/toan-network-org1.json
 CONNECTION_2=../Hyperledger-Fabric/iot-network/connection/org2/toan-network-org2.json
 EPF=../Hyperledger-Fabric/iot-network/connection/endorsement-policy.json
-DELAY=60 #sleep 1 min
+DELAY=5 #sleep 5 sec
 TIMEOUT=6000 # 100 min timeout
 composer network install --card $PEER_ADMIN_1 --archiveFile $NETWORK@$VERSION.bna
 composer network install --card $PEER_ADMIN_2 --archiveFile $NETWORK@$VERSION.bna
