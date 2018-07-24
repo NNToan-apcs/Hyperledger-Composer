@@ -2,7 +2,7 @@
 VERSION=0.0.9
 NETWORK=toan-network
 CHANNEL_NAME=abc
-PEER_ADMIN_1=PeerAdmin@$NETWORK-org1
+PEER_ADMIN_1=PeerAdmin@$NETWORK-org1    
 PEER_ADMIN_2=PeerAdmin@$NETWORK-org2
 USER_1=alice
 USER_2=bob
