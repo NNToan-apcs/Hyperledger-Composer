@@ -2,62 +2,43 @@
  * Write your model definitions here
  */
 
-namespace org.mobilenet
-
-// asset Mobile identified by macAddress {
-//   o String macAddress
-//   o String name
-//   o String description
-//   --> User owner
-// }
-
-// participant User identified by userId {
-//   o String userId
-//   o String firstName
-//   o String lastName
-// }
-
-// transaction Transfer {
-//   --> Mobile mobile
-//   --> User newOwner
-// }
-
-// event TransferNotification {
-//     --> Mobile mobile
-// }
+namespace org.trading.net
 
 
-asset Course identified by courseID {
-  o String courseID
+asset Commodity identified by commodityID {
+  o String commodityID
   o String name
   o String description
-  --> Lecturer owner
-  --> Student[] learners
+  o Integer price
+  --> Trader owner
 }
-
-participant Lecturer identified by lecturerID {
-  o String lecturerID
+participant Trader identified by traderID {
+  o String traderID
   o String firstName
   o String lastName
+  o Integer balance
 }
 
-participant Student identified by studentID {
-  o String studentID
-  o String firstName
-  o String lastName
+transaction TransferCommodity {
+  --> Commodity commodity
+  --> Trader newOwner
 }
 
-transaction AddStudentToCourse {
-  --> Course course
-  --> Student student
+transaction BuyCommodity {
+  --> Commodity commodity
 }
 
-event AddStudentToCourseSuccessNotification {
-  --> Course course
-  --> Student student
+event BuyCommoditySuccessNotification {
+  --> Commodity commodity
+  --> Trader buyer
 }
 
-event AddStudentToCourseFailNotification {
-  --> Course course
-  --> Student student
+event TransferCommoditySuccessNotification {
+  --> Commodity commodity
+  --> Trader newOwner
+}
+
+event BuyCommodityFailNotification {
+  --> Commodity commodity
+  --> Trader buyer
 }

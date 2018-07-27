@@ -4,14 +4,14 @@
 // query selectMobilesByOwner {
 //   description: "Select all commodities based on their owner"
 //   statement:
-//       SELECT org.mobilenet.Mobile
+//       SELECT org.trading.net.Mobile
 //           WHERE (owner == _$owner)
 // }
 
 // query selectMobiles {
 //   description: "Select all commodities"
 //   statement:
-//       SELECT org.mobilenet.Mobile
+//       SELECT org.trading.net.Mobile
 // }
 
 

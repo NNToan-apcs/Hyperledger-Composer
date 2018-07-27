@@ -1,6 +1,6 @@
 {
   "name": "toan-network",
-  "version": "0.0.9",
+  "version": "0.0.7",
   "description": "Mobile devices",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/toan-network.bna",

@@ -1,7 +1,7 @@
 #!/bin/bash
-VERSION=0.0.9
+VERSION=0.0.1
 NETWORK=toan-network
-CHANNEL_NAME=abc
+CHANNEL_NAME=mychannel
 PEER_ADMIN_1=PeerAdmin@$NETWORK-org1    
 PEER_ADMIN_2=PeerAdmin@$NETWORK-org2
 USER_1=alice
@@ -11,6 +11,26 @@ CONNECTION_2=../Hyperledger-Fabric/iot-network/connection/org2/toan-network-org2
 EPF=../Hyperledger-Fabric/iot-network/connection/endorsement-policy.json
 DELAY=5 #sleep 5 sec
 TIMEOUT=6000 # 100 min timeout
+
+while getopts "h?v:n:c:" opt; do
+  case "$opt" in
+    h|\?)
+      echo "Please use this following format:"
+      echo "./script.sh -c <ChannelName> -n <NetworkName> -v <NetworkVersion>"
+      echo "Default ChannelName: mychannel"
+      echo "Default NetworkName: toan-network"
+      echo "Default NetworkVersion: 0.0.1"
+      exit 0
+    ;;
+    v)  VERSION=$OPTARG
+    ;;
+    n)  NETWORK=$OPTARG
+    ;;
+    c)  CHANNEL_NAME=$OPTARG
+    ;;
+  esac
+done
+
 composer network install --card $PEER_ADMIN_1 --archiveFile $NETWORK@$VERSION.bna
 composer network install --card $PEER_ADMIN_2 --archiveFile $NETWORK@$VERSION.bna
 

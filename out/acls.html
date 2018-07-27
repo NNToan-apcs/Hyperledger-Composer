@@ -110,72 +110,72 @@ then my action will be  <strong>ALLOW</strong>ed</p>
 <p>Allow all participants access to all resources</p>
 <ul>
 <li><em>Action</em> : ALLOW</li>
-<li><em>Noun</em> : org.mobilenet.*</li>
+<li><em>Noun</em> : org.trading.net.*</li>
 <li><em>Participant</em> : org.hyperledger.composer.system.NetworkAdmin</li>
 <li><em>Predicate</em> : <code>true</code></li>
 </ul>
 <blockquote>
-<p>If I am a <strong>org.hyperledger.composer.system.NetworkAdmin</strong> and I am accessing the resource <strong>org.mobilenet.</strong>*
+<p>If I am a <strong>org.hyperledger.composer.system.NetworkAdmin</strong> and I am accessing the resource <strong>org.trading.net.</strong>*
 then my action will be  <strong>ALLOW</strong>ed</p>
 </blockquote>
 <h3 id="r1a-studentseeupdatethemselvesonly">R1a_StudentSeeUpdateThemselvesOnly</h3>
 <p>Student can see and update their own record only</p>
 <ul>
 <li><em>Action</em> : ALLOW</li>
-<li><em>Noun</em> : org.mobilenet.Student</li>
-<li><em>Participant</em> : org.mobilenet.Student:t</li>
+<li><em>Noun</em> : org.trading.net.Student</li>
+<li><em>Participant</em> : org.trading.net.Student:t</li>
 <li><em>Predicate</em> : <code>v.getIdentifier() == t.getIdentifier()</code></li>
 </ul>
 <blockquote>
-<p>If I am a <strong>org.mobilenet.Student:t</strong> and I am accessing the resource <strong>org.mobilenet.Student</strong>  and <strong>v.getIdentifier() == t.getIdentifier()</strong> is true
+<p>If I am a <strong>org.trading.net.Student:t</strong> and I am accessing the resource <strong>org.trading.net.Student</strong>  and <strong>v.getIdentifier() == t.getIdentifier()</strong> is true
 then my action will be  <strong>ALLOW</strong>ed</p>
 </blockquote>
 <h3 id="r1a-lecturerseeupdatethemselvesonly">R1a_LecturerSeeUpdateThemselvesOnly</h3>
 <p>Lecturer can see and update their own record only</p>
 <ul>
 <li><em>Action</em> : ALLOW</li>
-<li><em>Noun</em> : org.mobilenet.Lecturer</li>
-<li><em>Participant</em> : org.mobilenet.Lecturer:t</li>
+<li><em>Noun</em> : org.trading.net.Lecturer</li>
+<li><em>Participant</em> : org.trading.net.Lecturer:t</li>
 <li><em>Predicate</em> : <code>v.getIdentifier() == t.getIdentifier()</code></li>
 </ul>
 <blockquote>
-<p>If I am a <strong>org.mobilenet.Lecturer:t</strong> and I am accessing the resource <strong>org.mobilenet.Lecturer</strong>  and <strong>v.getIdentifier() == t.getIdentifier()</strong> is true
+<p>If I am a <strong>org.trading.net.Lecturer:t</strong> and I am accessing the resource <strong>org.trading.net.Lecturer</strong>  and <strong>v.getIdentifier() == t.getIdentifier()</strong> is true
 then my action will be  <strong>ALLOW</strong>ed</p>
 </blockquote>
 <h3 id="r1b-lecturerseetheircourse">R1b_LecturerSeeTheirCourse</h3>
 <p>Lecturer can see/work with their own Course</p>
 <ul>
 <li><em>Action</em> : ALLOW</li>
-<li><em>Noun</em> : org.mobilenet.Course</li>
-<li><em>Participant</em> : org.mobilenet.Lecturer:t</li>
+<li><em>Noun</em> : org.trading.net.Course</li>
+<li><em>Participant</em> : org.trading.net.Lecturer:t</li>
 <li><em>Predicate</em> : <code>c.owner.getIdentifier() == t.getIdentifier()</code></li>
 </ul>
 <blockquote>
-<p>If I am a <strong>org.mobilenet.Lecturer:t</strong> and I am accessing the resource <strong>org.mobilenet.Course</strong>  and <strong>c.owner.getIdentifier() == t.getIdentifier()</strong> is true
+<p>If I am a <strong>org.trading.net.Lecturer:t</strong> and I am accessing the resource <strong>org.trading.net.Course</strong>  and <strong>c.owner.getIdentifier() == t.getIdentifier()</strong> is true
 then my action will be  <strong>ALLOW</strong>ed</p>
 </blockquote>
 <h3 id="r1b-studentseetheircourse">R1b_StudentSeeTheirCourse</h3>
 <p>Student can see with their own Course</p>
 <ul>
 <li><em>Action</em> : ALLOW</li>
-<li><em>Noun</em> : org.mobilenet.Course</li>
-<li><em>Participant</em> : org.mobilenet.Student:t</li>
+<li><em>Noun</em> : org.trading.net.Course</li>
+<li><em>Participant</em> : org.trading.net.Student:t</li>
 <li><em>Predicate</em> : <code>c.owner.getIdentifier() == t.getIdentifier()</code></li>
 </ul>
 <blockquote>
-<p>If I am a <strong>org.mobilenet.Student:t</strong> and I am accessing the resource <strong>org.mobilenet.Course</strong>  and <strong>c.owner.getIdentifier() == t.getIdentifier()</strong> is true
+<p>If I am a <strong>org.trading.net.Student:t</strong> and I am accessing the resource <strong>org.trading.net.Course</strong>  and <strong>c.owner.getIdentifier() == t.getIdentifier()</strong> is true
 then my action will be  <strong>ALLOW</strong>ed</p>
 </blockquote>
 <h3 id="r2-enableaddstudenttocoursetxn">R2_EnableAddStudentToCourseTxn</h3>
 <p>Enable Lecturers to submit AddStudentToCourse transactions</p>
 <ul>
 <li><em>Action</em> : ALLOW</li>
-<li><em>Noun</em> : org.mobilenet.AddStudentToCourse</li>
-<li><em>Participant</em> : org.mobilenet.Lecturer</li>
+<li><em>Noun</em> : org.trading.net.AddStudentToCourse</li>
+<li><em>Participant</em> : org.trading.net.Lecturer</li>
 <li><em>Predicate</em> : <code>true</code></li>
 </ul>
 <blockquote>
-<p>If I am a <strong>org.mobilenet.Lecturer</strong> and I am accessing the resource <strong>org.mobilenet.AddStudentToCourse</strong>
+<p>If I am a <strong>org.trading.net.Lecturer</strong> and I am accessing the resource <strong>org.trading.net.AddStudentToCourse</strong>
 then my action will be  <strong>ALLOW</strong>ed</p>
 </blockquote>
 <h3 id="r3-lecturersseeownhistoryonly">R3_LecturersSeeOwnHistoryOnly</h3>
@@ -183,11 +183,11 @@ then my action will be  <strong>ALLOW</strong>ed</p>
 <ul>
 <li><em>Action</em> : DENY</li>
 <li><em>Noun</em> : org.hyperledger.composer.system.HistorianRecord</li>
-<li><em>Participant</em> : org.mobilenet.Lecturer:t</li>
+<li><em>Participant</em> : org.trading.net.Lecturer:t</li>
 <li><em>Predicate</em> : <code>v.participantInvoking.getIdentifier() != t.getIdentifier()</code></li>
 </ul>
 <blockquote>
-<p>If I am a <strong>org.mobilenet.Lecturer:t</strong> and I am accessing the resource <strong>org.hyperledger.composer.system.HistorianRecord</strong>  and <strong>v.participantInvoking.getIdentifier() != t.getIdentifier()</strong> is true
+<p>If I am a <strong>org.trading.net.Lecturer:t</strong> and I am accessing the resource <strong>org.hyperledger.composer.system.HistorianRecord</strong>  and <strong>v.participantInvoking.getIdentifier() != t.getIdentifier()</strong> is true
 then my action will be  <strong>DENY</strong>ed</p>
 </blockquote>
  

@@ -94,10 +94,10 @@
     // set the new owner of the commodity
     // IF NOT LECTURER =&gt; FAIL (TODO)
     CourseAccess.course.learners.push(CourseAccess.student);
-    let assetRegistry = await getAssetRegistry('org.mobilenet.Course');
+    let assetRegistry = await getAssetRegistry('org.trading.net.Course');
 
     // emit a notification that a Transfer has occurred
-    let SuccessNotification = getFactory().newEvent('org.mobilenet', 'AddStudentToCourseSuccessNotification');
+    let SuccessNotification = getFactory().newEvent('org.trading.net', 'AddStudentToCourseSuccessNotification');
     SuccessNotification.course = CourseAccess.course;
     SuccessNotification.student = CourseAccess.student;
     emit(SuccessNotification);

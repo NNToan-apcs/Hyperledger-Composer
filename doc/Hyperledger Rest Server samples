@@ -1,41 +1,41 @@
 
 
-composer participant add -c alice@toan-network -d '{"$class":"org.mobilenet.User","userId":"1", "firstName":"Jo","lastName":"Doe"}'
+composer participant add -c alice@toan-network -d '{"$class":"org.trading.net.User","userId":"1", "firstName":"Jo","lastName":"Doe"}'
 
-composer identity issue -c alice@toan-network -f jo.card -u jdoe -a "resource:org.mobilenet.User#1"
+composer identity issue -c alice@toan-network -f jo.card -u jdoe -a "resource:org.trading.net.User#1"
 
 composer card import -f jo.card
 composer network ping -c jdoe@toan-network
 
 {
-  "$class": "org.mobilenet.User",
+  "$class": "org.trading.net.User",
   "userId": "3",
   "firstName": "Toan",
   "lastName": "Nguyen"
 }
 
 {
-  "$class": "org.mobilenet.Mobile",
+  "$class": "org.trading.net.Mobile",
   "macAddress": "0x123",
   "name": "Iphone8",
   "description": "Iphone 8 Smart Phone",
-  "owner": "resource:org.mobilenet.User#1"
+  "owner": "resource:org.trading.net.User#1"
 }
 
 {
-  "$class": "org.mobilenet.Mobile",
+  "$class": "org.trading.net.Mobile",
   "macAddress": "0x234",
   "name": "Iphone10",
   "description": "Iphone 10 Smart Phone",
-  "owner": "resource:org.mobilenet.User#3"
+  "owner": "resource:org.trading.net.User#3"
 }
 
 composer network list -c jdoe@toan-network
 
-composer participant add -c bob@toan-network -d '{"$class":"org.mobilenet.User","userId":"2", "firstName":"Dave","lastName":"Lowe"}'
-composer identity issue -c bob@toan-network -f dave.card -u dlowe -a "resource:org.mobilenet.User#2"
+composer participant add -c bob@toan-network -d '{"$class":"org.trading.net.User","userId":"2", "firstName":"Dave","lastName":"Lowe"}'
+composer identity issue -c bob@toan-network -f dave.card -u dlowe -a "resource:org.trading.net.User#2"
 
 composer card import -f dave.card
 composer network ping -c dlowe@toan-network
 
-composer transaction submit --card jdoe@toan-network -d '{"$class":"org.mobilenet.Transfer","mobile":"resource:org.mobilenet.Mobile#0x234","newOwner":"resource:org.mobilenet.User#3"}'
+composer transaction submit --card jdoe@toan-network -d '{"$class":"org.trading.net.Transfer","mobile":"resource:org.trading.net.Mobile#0x234","newOwner":"resource:org.trading.net.User#3"}'

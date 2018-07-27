@@ -26,7 +26,7 @@ const chai = require('chai');
 chai.should();
 chai.use(require('chai-as-promised'));
 
-const namespace = 'org.mobilenet';
+const namespace = 'org.trading.net';
 const assetType = 'SampleAsset';
 const assetNS = namespace + '.' + assetType;
 const participantType = 'SampleParticipant';

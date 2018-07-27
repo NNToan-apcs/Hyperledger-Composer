@@ -8,7 +8,7 @@
 //     description: "Allow all participants access to all resources"
 //     participant: "ANY"
 //     operation: ALL
-//     resource: "org.mobilenet.*"
+//     resource: "org.trading.net.*"
 //     action: ALLOW
 // }
 
@@ -21,64 +21,83 @@ rule SystemACL {
 }
 
 rule Admin_CanHaveFullAccess {
-    description: "Allow all participants access to all resources"
+    description: "Allow all NetworkAdmin access to all resources"
     participant: "org.hyperledger.composer.system.NetworkAdmin"
     operation: ALL
-    resource: "org.mobilenet.*"
+    resource: "org.trading.net.**"
     action: ALLOW
 }
 
-rule R1a_StudentSeeUpdateThemselvesOnly {
-  description: "Student can see and update their own record only"
-  participant(t): "org.mobilenet.Student"
+rule R1a_TraderSeeUpdateThemselvesOnly {
+  description: "Trader can see and update their own record only"
+  participant(t): "org.trading.net.Trader"
   operation: READ, UPDATE
-  resource(v): "org.mobilenet.Student"
+  resource(v): "org.trading.net.Trader"
   condition: (v.getIdentifier() == t.getIdentifier())
   action: ALLOW
 }
 
-rule R1a_LecturerSeeUpdateThemselvesOnly {
-  description: "Lecturer can see and update their own record only"
-  participant(t): "org.mobilenet.Lecturer"
-  operation: READ, UPDATE
-  resource(v): "org.mobilenet.Lecturer"
-  condition: (v.getIdentifier() == t.getIdentifier())
-  action: ALLOW
-}
+// rule R1a_TSeeUpdateThemselvesOnly {
+//   description: "Lecturer can see and update their own record only"
+//   participant(t): "org.trading.net.Lecturer"
+//   operation: READ, UPDATE
+//   resource(v): "org.trading.net.Lecturer"
+//   condition: (v.getIdentifier() == t.getIdentifier())
+//   action: ALLOW
+// }
 
 
-rule R1b_LecturerSeeTheirCourse {
-  description: "Lecturer can see/work with their own Course"
-  participant(t): "org.mobilenet.Lecturer"
+rule R1b_TraderSeeTheirCommodity {
+  description: "Trader can see/work with their own Course"
+  participant(t): "org.trading.net.Trader"
   operation: ALL
-  resource(c): "org.mobilenet.Course"
+  resource(c): "org.trading.net.Commodity"
   condition: (c.owner.getIdentifier() == t.getIdentifier())
   action: ALLOW
 }
 
-rule R1b_StudentSeeTheirCourse {
-  description: "Student can see with their own Course"
-  participant(t): "org.mobilenet.Student"
-  operation: READ
-  resource(c): "org.mobilenet.Course"
-  condition: (c.owner.getIdentifier() == t.getIdentifier())
-  action: ALLOW
-}
+// rule R1b_StudentSeeTheirCourse {
+//   description: "Student can see with their own Course"
+//   participant(t): "org.trading.net.Student"
+//   operation: READ
+//   resource(c): "org.trading.net.Course"
+//   condition: (c.owner.getIdentifier() == t.getIdentifier())
+//   action: ALLOW
+// }
 
-rule R2_EnableAddStudentToCourseTxn {
-    description: "Enable Lecturers to submit AddStudentToCourse transactions"
-    participant: "org.mobilenet.Lecturer"
+rule R2_EnableTransferCommodityTxn {
+    description: "Enable Trader to submit TransferCommodity transactions"
+    participant(t): "org.trading.net.Trader"
     operation: ALL
-    resource: "org.mobilenet.AddStudentToCourse"
+    resource(c): "org.trading.net.TransferCommodity"
+    condition: (c.commodity.owner.getIdentifier() == t.getIdentifier())
     action: ALLOW
 }
 
-rule R3_LecturersSeeOwnHistoryOnly {
-  description: "Lecturers should be able to see the history of their own transactions only"
-  participant(t): "org.mobilenet.Lecturer"
+rule R2_EnableBuyCommodityTxn {
+    description: "Enable Trader to submit BuyCommodity transactions"
+    participant(t): "org.trading.net.Trader"
+    operation: ALL
+    resource(c): "org.trading.net.BuyCommodity"
+    condition: (c.commodity.owner.getIdentifier() == t.getIdentifier())
+    action: ALLOW
+}
+
+rule R3_TradersSeeOwnHistoryOnly {
+  description: "Traders should be able to see the history of their own transactions only"
+  participant(t): "org.trading.net.Trader"
   operation: READ
   resource(v): "org.hyperledger.composer.system.HistorianRecord"
   condition: (v.participantInvoking.getIdentifier() != t.getIdentifier())
   action: DENY
 }
+
+// rule R3_StudentsSeeOwnHistoryOnly {
+//   description: "Students should be able to see the history of their own transactions only"
+//   participant(t): "org.trading.net.Student"
+//   operation: READ
+//   resource(v): "org.hyperledger.composer.system.HistorianRecord"
+//   condition: (v.participantInvoking.getIdentifier() != t.getIdentifier())
+//   action: DENY
+// }
 
