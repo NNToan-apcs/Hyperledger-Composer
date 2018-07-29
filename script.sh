@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=0.0.1
+VERSION=0.0.9
 NETWORK=toan-network
 CHANNEL_NAME=mychannel
 PEER_ADMIN_1=PeerAdmin@$NETWORK-org1    

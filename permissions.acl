@@ -101,3 +101,11 @@ rule R3_TradersSeeOwnHistoryOnly {
 //   action: DENY
 // }
 
+rule R4_CommodityMustHaveOwner {
+  description: "Commodity should be created with valid owner"
+  participant(t): "**"
+  operation: CREATE
+  resource(v): "org.trading.net.BuyCommodity"
+  condition: (!getParticipantRegistry('org.trading.net.Trader').exist(v.participantInvoking.getIdentifier()))
+  action: DENY
+}
