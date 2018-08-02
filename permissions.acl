@@ -102,10 +102,10 @@ rule R3_TradersSeeOwnHistoryOnly {
 // }
 
 rule R4_CommodityMustHaveOwner {
-  description: "Commodity should be created with valid owner"
+  description: "Commodity should be created with valid owner who created this asset"
   participant(t): "**"
   operation: CREATE
-  resource(v): "org.trading.net.BuyCommodity"
-  condition: (!getParticipantRegistry('org.trading.net.Trader').exist(v.participantInvoking.getIdentifier()))
+  resource(v): "org.trading.net.Commodity"
+  condition: (v.owner.getIdentifier() != t.getIdentifier())
   action: DENY
 }

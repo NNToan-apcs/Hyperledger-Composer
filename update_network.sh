@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=0.0.10
+VERSION=0.0.13
 NETWORK=toan-network
 DELAY=60 #sleep 1 min
 TIMEOUT=6000 # 100 min timeout

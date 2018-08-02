@@ -10,6 +10,7 @@ asset Commodity identified by commodityID {
   o String name
   o String description
   o Integer price
+  o Integer quantity
   --> Trader owner
 }
 participant Trader identified by traderID {
