@@ -57,10 +57,7 @@ do
     test $res -eq 1 && VALUE=$(cat log.txt | awk '/The connection to the network was successfully tested/ {print $NF}')
     test "$VALUE" = "$EXPECTED_RESULT" && let rc=0
     test $res -eq 1 && VALUE=$(cat log.txt | awk '/status: 500, message: chaincode exists/{print $NF; exit}')
-    echo $VALUE
-    echo "$EXPECTED_RESULT)"
     test "$VALUE" = "$EXPECTED_RESULT)" && let rc=2
-    echo $rc
 done
 echo
 cat log.txt

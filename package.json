@@ -1,7 +1,7 @@
 {
   "name": "toan-network",
-  "version": "0.0.15",
-  "description": "Mobile devices",
+  "version": "0.0.16",
+  "description": "Trading between two organization Org1 and Org2",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/toan-network.bna",
     "pretest": "npm run lint",
