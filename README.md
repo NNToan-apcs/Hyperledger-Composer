@@ -73,7 +73,7 @@ composer-rest-server -c alice@toan-network -n never -w true
 
 Change version in package.json to <VERSION> version
 ```
-VERSION=0.0.10
+VERSION=0.0.14
 composer archive create --sourceType dir --sourceName . -a toan-network@$VERSION.bna 
 
 composer network install --card PeerAdmin@toan-network-org1 --archiveFile toan-network@$VERSION.bna

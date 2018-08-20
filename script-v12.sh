@@ -6,9 +6,9 @@ PEER_ADMIN_1=PeerAdmin@$NETWORK-org1
 PEER_ADMIN_2=PeerAdmin@$NETWORK-org2
 USER_1=alice
 USER_2=bob
-CONNECTION_1=../Hyperledger-Fabric/iot-network/connection/org1/toan-network-org1.json
-CONNECTION_2=../Hyperledger-Fabric/iot-network/connection/org2/toan-network-org2.json
-EPF=../Hyperledger-Fabric/iot-network/connection/endorsement-policy.json
+CONNECTION_1=../Hyperledger-Fabric/iot-network-v12/connection/org1/toan-network-org1.json
+CONNECTION_2=../Hyperledger-Fabric/iot-network-v12/connection/org2/toan-network-org2.json
+EPF=../Hyperledger-Fabric/iot-network-v12/connection/endorsement-policy.json
 DELAY=5 #sleep 5 sec
 TIMEOUT=6000 # 100 min timeout
 
@@ -62,12 +62,15 @@ do
     docker logs --tail 50 $PEER1_ORG1 >&dockerLogs/$PEER1_ORG1.txt
     docker logs --tail 50 $PEER0_ORG2 >&dockerLogs/$PEER0_ORG2.txt
     docker logs --tail 50 $PEER1_ORG2 >&dockerLogs/$PEER1_ORG2.txt
-    
+    docker logs --tail 50 orderer.iot.net >&dockerLogs/orderer.iot.net.txt
+    docker logs --tail 50 ca_peerOrg1 >&dockerLogs/ca_peerOrg1.txt
+    docker logs --tail 50 ca_peerOrg2 >&dockerLogs/ca_peerOrg2.txt
     set +x
     test $res -eq 1 && VALUE=$(cat log.txt | awk '/The connection to the network was successfully tested/ {print $NF}')
     test "$VALUE" = "$EXPECTED_RESULT" && let rc=0
-    test $res -eq 1 && VALUE=$(cat log.txt | awk '/status: 500, message: chaincode exists/{print $NF; exit}')
-    test "$VALUE" = "$EXPECTED_RESULT)" && let rc=2
+    test $res -eq 1 && VALUE=$(cat log.txt | awk '/chaincode with name/{print $NF; exit}')
+
+    test "$VALUE" = "exists" && let rc=2
 done
 echo
 

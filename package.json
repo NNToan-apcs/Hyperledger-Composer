@@ -1,6 +1,6 @@
 {
   "name": "toan-network",
-  "version": "0.0.16",
+  "version": "0.0.1",
   "description": "Trading between two organization Org1 and Org2",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/toan-network.bna",

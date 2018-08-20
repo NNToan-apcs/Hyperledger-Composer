@@ -9,3 +9,4 @@ bob/*
 angular-app/*
 dist/*
 log.txt
+dockerLogs/*
